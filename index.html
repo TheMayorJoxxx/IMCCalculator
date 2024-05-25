@@ -10,7 +10,7 @@
             font-family: Arial, sans-serif;
             background: #f0f2f5;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             height: 100vh;
             margin: 0;
@@ -22,6 +22,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
             width: 300px;
+            margin-bottom: 20px;
         }
         .container h1 {
             margin-bottom: 20px;
@@ -57,6 +58,27 @@
             background: #f8d7da;
             color: #721c24;
         }
+        .table-container {
+            width: 300px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .table-container table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table-container table, th, td {
+            border: 1px solid #ddd;
+        }
+        .table-container th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        .table-container th {
+            background: #f8f9fa;
+        }
     </style>
 </head>
 <body>
@@ -74,11 +96,47 @@
         <div id="result" class="result" style="display: none;"></div>
     </div>
 
+    <div class="table-container" id="table-container" style="display: none;">
+        <h2>Tabla de categorías de IMC</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Categoría</th>
+                    <th>IMC</th>
+                    <th>Peso (kg)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Bajo peso</td>
+                    <td>Menos de 18.5</td>
+                    <td id="underweight-weight"></td>
+                </tr>
+                <tr>
+                    <td>Peso normal</td>
+                    <td>18.5 - 24.9</td>
+                    <td id="normal-weight"></td>
+                </tr>
+                <tr>
+                    <td>Sobrepeso</td>
+                    <td>25 - 29.9</td>
+                    <td id="overweight-weight"></td>
+                </tr>
+                <tr>
+                    <td>Obesidad</td>
+                    <td>30 o más</td>
+                    <td id="obese-weight"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
     <script>
         function calculateIMC() {
-            const height = parseFloat(document.getElementById('height').value) / 100;
+            const heightCm = parseFloat(document.getElementById('height').value);
+            const heightM = heightCm / 100;
             const weight = parseFloat(document.getElementById('weight').value);
-            const imc = (weight / (height * height)).toFixed(2);
+            const imc = (weight / (heightM * heightM)).toFixed(2);
             const resultDiv = document.getElementById('result');
             
             let resultText = '';
@@ -101,6 +159,20 @@
             resultDiv.style.display = 'block';
             resultDiv.className = `result ${resultClass}`;
             resultDiv.innerHTML = resultText;
+
+            // Mostrar tabla
+            const tableContainer = document.getElementById('table-container');
+            tableContainer.style.display = 'block';
+
+            // Calcular y mostrar pesos para cada categoría
+            document.getElementById('underweight-weight').innerText = `< ${calculateWeight(heightM, 18.5).toFixed(2)}`;
+            document.getElementById('normal-weight').innerText = `${calculateWeight(heightM, 18.5).toFixed(2)} - ${calculateWeight(heightM, 24.9).toFixed(2)}`;
+            document.getElementById('overweight-weight').innerText = `${calculateWeight(heightM, 25).toFixed(2)} - ${calculateWeight(heightM, 29.9).toFixed(2)}`;
+            document.getElementById('obese-weight').innerText = `> ${calculateWeight(heightM, 30).toFixed(2)}`;
+        }
+
+        function calculateWeight(height, imc) {
+            return imc * (height * height);
         }
     </script>
 </body>
