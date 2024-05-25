@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de IMC</title>
+    <style>
+        /* Estilos CSS (puedes personalizarlos según tus preferencias) */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de IMC</h1>
+        <p>Ingresa tu altura (en metros) y tu peso (en kilogramos) para calcular tu IMC:</p>
+        <input type="number" id="altura" placeholder="Altura (m)">
+        <input type="number" id="peso" placeholder="Peso (kg)">
+        <button onclick="calcularIMC()">Calcular IMC</button>
+    </div>
+
+    <script>
+        function calcularIMC() {
+            const altura = parseFloat(document.getElementById('altura').value);
+            const peso = parseFloat(document.getElementById('peso').value);
+
+            if (isNaN(altura) || isNaN(peso)) {
+                alert('Por favor, ingresa valores válidos para altura y peso.');
+                return;
+            }
+
+            const imc = peso / (altura ** 2);
+            alert(`Tu IMC es: ${imc.toFixed(2)}`);
+        }
+    </script>
+</body>
+</html>
