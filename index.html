@@ -4,51 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de IMC</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM4HY+V4f7d5C/OXnKRbV6o8b0VoJZjgU5qFaT" crossorigin="anonymous">
     <style>
-        /* Estilos CSS (puedes personalizarlos según tus preferencias) */
         body {
             font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
         }
-
         .container {
-            max-width: 800px;
-            margin: 0 auto;
+            background: white;
             padding: 20px;
-            background-color: #ffffff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
         }
-        h1 {
-            color: #333;
+        .container h1 {
+            margin-bottom: 20px;
         }
-        p {
-            color: #666;
+        .container .input-group {
+            margin-bottom: 15px;
+        }
+        .container .input-group input {
+            width: calc(100% - 40px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .container .input-group i {
+            color: #aaa;
+        }
+        .container .result {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .container .result.normal {
+            background: #d4edda;
+            color: #155724;
+        }
+        .container .result.overweight {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .container .result.obese {
+            background: #f8d7da;
+            color: #721c24;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Calculadora de IMC p</h1>
-        <p>Ingresa tu altura (en metros) y tu peso (en kilogramos) para calcular tu IMC:</p>
-        <input type="number" id="altura" placeholder="Altura (m)">
-        <input type="number" id="peso" placeholder="Peso (kg)">
-        <button onclick="calcularIMC()">Calcular IMC</button>
+        <h1>Calculadora de IMC</h1>
+        <div class="input-group">
+            <input type="number" id="height" placeholder="Altura (cm)" required>
+            <i class="fas fa-ruler-vertical"></i>
+        </div>
+        <div class="input-group">
+            <input type="number" id="weight" placeholder="Peso (kg)" required>
+            <i class="fas fa-weight"></i>
+        </div>
+        <button onclick="calculateIMC()">Calcular IMC</button>
+        <div id="result" class="result" style="display: none;"></div>
     </div>
 
     <script>
-        function calcularIMC() {
-            const altura = parseFloat(document.getElementById('altura').value);
-            const peso = parseFloat(document.getElementById('peso').value);
+        function calculateIMC() {
+            const height = parseFloat(document.getElementById('height').value) / 100;
+            const weight = parseFloat(document.getElementById('weight').value);
+            const imc = (weight / (height * height)).toFixed(2);
+            const resultDiv = document.getElementById('result');
+            
+            let resultText = '';
+            let resultClass = '';
 
-            if (isNaN(altura) || isNaN(peso)) {
-                alert('Por favor, ingresa valores válidos para altura y peso.');
-                return;
+            if (imc < 18.5) {
+                resultText = `Tu IMC es ${imc}. Estás por debajo del peso normal.`;
+                resultClass = 'underweight';
+            } else if (imc >= 18.5 && imc < 24.9) {
+                resultText = `Tu IMC es ${imc}. Tienes un peso normal.`;
+                resultClass = 'normal';
+            } else if (imc >= 25 && imc < 29.9) {
+                resultText = `Tu IMC es ${imc}. Estás en sobrepeso.`;
+                resultClass = 'overweight';
+            } else {
+                resultText = `Tu IMC es ${imc}. Tienes obesidad.`;
+                resultClass = 'obese';
             }
 
-            const imc = peso / (altura ** 2);
-            alert(`Tu IMC es: ${imc.toFixed(2)}`);
+            resultDiv.style.display = 'block';
+            resultDiv.className = `result ${resultClass}`;
+            resultDiv.innerHTML = resultText;
         }
     </script>
 </body>
